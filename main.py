@@ -134,6 +134,11 @@ async def add_channel(client: Client, message: Message):
 
     try:
         new_channel_id = int(message.command[1])
+        
+        # Validate that the channel ID starts with -100
+        if not str(new_channel_id).startswith("-100"):
+            return await message.reply_text("Invalid channel ID. Channel IDs must start with -100.")
+        
         if new_channel_id in CHANNELS_LIST:
             await message.reply_text("Channel ID is already added.")
         else:
@@ -149,19 +154,26 @@ async def add_channel(client: Client, message: Message):
 async def remove_channel(client: Client, message: Message):
     try:
         channel_id_to_remove = int(message.command[1])
+        
+        # Check if the channel exists in the list
         if channel_id_to_remove not in CHANNELS_LIST:
-            await message.reply_text("Channel ID is not in the list.")
-        elif CHANNEL_OWNERS.get(channel_id_to_remove) != message.from_user.id:
-            await message.reply_text("You are not the owner of this channel and cannot remove it.")
-        else:
-            CHANNELS_LIST.remove(channel_id_to_remove)
-            del CHANNEL_OWNERS[channel_id_to_remove]  # Remove the channel from the ownership dictionary
-            # Update the environment variable (if needed)
-            os.environ['CHANNELS'] = ','.join(map(str, CHANNELS_LIST))
-            await message.reply_text(f"Channel ID {channel_id_to_remove} removed from the list.")
+            return await message.reply_text("Channel ID is not in the list.")
+        
+        # Check if the user is the OWNER or the channel owner
+        if message.from_user.id != OWNER and CHANNEL_OWNERS.get(channel_id_to_remove) != message.from_user.id:
+            return await message.reply_text("You are not authorized to remove this channel.")
+
+        # Remove the channel
+        CHANNELS_LIST.remove(channel_id_to_remove)
+        if channel_id_to_remove in CHANNEL_OWNERS:
+            del CHANNEL_OWNERS[channel_id_to_remove]  # Remove from the ownership dictionary if present
+        
+        # Update the environment variable (if needed)
+        os.environ['CHANNELS'] = ','.join(map(str, CHANNELS_LIST))
+        await message.reply_text(f"Channel ID {channel_id_to_remove} removed from the list.")
     except (IndexError, ValueError):
         await message.reply_text("Please provide a valid channel ID.")
-        
+
 @bot.on_message(filters.command("channels") & filters.private)
 async def list_channels(client: Client, message: Message):
     if message.chat.id != OWNER:
@@ -393,14 +405,14 @@ async def txt_handler(client: Client, m: Message):
         f"➥ /info – User Details\n"  
         f"➥ /logs – View Bot Activity\n"
         f"▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰\n"
-        f"⚙️ 𝐔𝐬𝐞𝐫 𝐀𝐮𝐭𝐡𝐞𝐧𝐭𝐢𝐜𝐚𝐭𝐢𝐨𝐧: **(OWNER)**\n\n" 
-        f"➥ /addauth ID – Add User ID\n" 
-        f"➥ /remauth ID – Remove User ID\n"  
+        f"👤 𝐔𝐬𝐞𝐫 𝐀𝐮𝐭𝐡𝐞𝐧𝐭𝐢𝐜𝐚𝐭𝐢𝐨𝐧: **(OWNER)**\n\n" 
+        f"➥ /addauth xxxx – Add User ID\n" 
+        f"➥ /remauth xxxx – Remove User ID\n"  
         f"➥ /users – Total User List\n"  
         f"▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰\n"
-        f"⚙️ 𝐂𝐡𝐚𝐧𝐧𝐞𝐥𝐬: **(Auth Users)**\n\n" 
-        f"➥ /addchnl chnl_id – Add\n" 
-        f"➥ /remchnl chnl_id – Remove\n"  
+        f"📁 𝐂𝐡𝐚𝐧𝐧𝐞𝐥𝐬: **(Auth Users)**\n\n" 
+        f"➥ /addchnl -100xxxx – Add\n" 
+        f"➥ /remchnl -100xxxx – Remove\n"  
         f"➥ /channels – List - (OWNER)\n"  
         f"▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰\n"
         f"💡 𝗡𝗼𝘁𝗲:\n\n"  
