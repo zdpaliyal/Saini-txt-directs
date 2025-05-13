@@ -102,7 +102,7 @@ async def add_auth_user(client: Client, message: Message):
     except (IndexError, ValueError):
         await message.reply_text("Please provide a valid user ID.")
         
-@bot.on_message(filters.command("rmauth") & filters.private)
+@bot.on_message(filters.command("remauth") & filters.private)
 async def remove_auth_user(client: Client, message: Message):
     if message.chat.id != OWNER:
         return await message.reply_text("You are not authorized to use this command.")
@@ -127,7 +127,7 @@ async def list_auth_users(client: Client, message: Message):
     user_list = '\n'.join(map(str, AUTH_USERS))
     await message.reply_text(f"<blockquote>Authorized Users:</blockquote>\n{user_list}")
 
-@bot.on_message(filters.command("addchannel") & filters.private)
+@bot.on_message(filters.command("addchnl") & filters.private)
 async def add_channel(client: Client, message: Message):
     if message.from_user.id not in AUTH_USERS:
         return await message.reply_text("You are not authorized to use this command.")
@@ -145,7 +145,7 @@ async def add_channel(client: Client, message: Message):
     except (IndexError, ValueError):
         await message.reply_text("Please provide a valid channel ID.")
 
-@bot.on_message(filters.command("remchannel") & filters.private)
+@bot.on_message(filters.command("remchnl") & filters.private)
 async def remove_channel(client: Client, message: Message):
     try:
         channel_id_to_remove = int(message.command[1])
@@ -392,7 +392,17 @@ async def txt_handler(client: Client, m: Message):
         f"➥ /id – Get Chat/User ID\n"  
         f"➥ /info – User Details\n"  
         f"➥ /logs – View Bot Activity\n"
-        f"▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰\n"  
+        f"▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰\n"
+        f"⚙️ 𝐔𝐬𝐞𝐫 𝐀𝐮𝐭𝐡𝐞𝐧𝐭𝐢𝐜𝐚𝐭𝐢𝐨𝐧: **(OWNER)**\n\n" 
+        f"➥ /addauth ID – Add User ID\n" 
+        f"➥ /remauth ID – Remove User ID\n"  
+        f"➥ /users – Total User List\n"  
+        f"▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰\n"
+        f"⚙️ 𝐂𝐡𝐚𝐧𝐧𝐞𝐥𝐬: **(Auth Users)**\n\n" 
+        f"➥ /addchnl chnl_id – Add\n" 
+        f"➥ /remchnl chnl_id – Remove\n"  
+        f"➥ /channels – List - (OWNER)\n"  
+        f"▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰\n"
         f"💡 𝗡𝗼𝘁𝗲:\n\n"  
         f"• Send any link for auto-extraction\n"  
         f"• Supports batch processing\n\n"  
@@ -414,6 +424,14 @@ async def send_logs(client: Client, m: Message):  # Correct parameter name
 
 @bot.on_message(filters.command(["drm"]) )
 async def txt_handler(bot: Client, m: Message):
+    if m.chat.type == "private":
+        if m.from_user.id not in AUTH_USERS:
+            await m.reply_text(f"__**Oops, You are not authorized to use this command.**__")
+            return
+    elif m.chat.type in ["group", "supergroup", "channel"]:
+        if m.chat.id not in CHANNELS_LIST:
+            await m.reply_text(f"__**Oops, This channel/group is not authorized to use this command.**__")
+            return
     editable = await m.reply_text(f"**🔹Hi I am Poweful TXT Downloader📥 Bot.\n🔹Send me the txt file and wait.**")
     input: Message = await bot.listen(editable.chat.id)
     x = await input.download()
