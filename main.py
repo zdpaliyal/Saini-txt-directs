@@ -424,14 +424,12 @@ async def send_logs(client: Client, m: Message):  # Correct parameter name
 
 @bot.on_message(filters.command(["drm"]) )
 async def txt_handler(bot: Client, m: Message):
-    if m.chat.type == "private":
-        if m.from_user.id not in AUTH_USERS:
-            await m.reply_text(f"__**Oops, You are not authorized to use this command.**__")
-            return
-    elif m.chat.type in ["group", "supergroup", "channel"]:
-        if m.chat.id not in CHANNELS_LIST:
-            await m.reply_text(f"__**Oops, This channel/group is not authorized to use this command.**__")
-            return
+    if m.chat.type == "private" and m.from_user.id not in AUTH_USERS:
+        await m.reply_text(f"__**Oops, You are not authorized to use this command.**__")
+        return
+    elif m.chat.type in ["group", "supergroup", "channel"] and m.chat.id not in CHANNELS_LIST:
+        await m.reply_text(f"__**Oops, This channel/group is not authorized to use this command.**__")
+        return
     editable = await m.reply_text(f"**🔹Hi I am Poweful TXT Downloader📥 Bot.\n🔹Send me the txt file and wait.**")
     input: Message = await bot.listen(editable.chat.id)
     x = await input.download()
