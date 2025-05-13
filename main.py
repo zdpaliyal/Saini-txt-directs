@@ -49,6 +49,7 @@ bot = Client(
 
 AUTH_USER = os.environ.get('AUTH_USERS', '5680454765').split(',')
 AUTH_USERS = [int(user_id) for user_id in AUTH_USER]
+CHANNEL_OWNERS = {}
 CHANNELS = os.environ.get('CHANNELS', '').split(',')
 CHANNELS_LIST = [int(channel_id) for channel_id in CHANNELS if channel_id.isdigit()]
 cookies_file_path = os.getenv("cookies_file_path", "youtube_cookies.txt")
@@ -128,38 +129,39 @@ async def list_auth_users(client: Client, message: Message):
 
 @bot.on_message(filters.command("addchannel") & filters.private)
 async def add_channel(client: Client, message: Message):
-    if message.chat.id != OWNER:
+    if message.from_user.id not in AUTH_USERS:
         return await message.reply_text("You are not authorized to use this command.")
-    
+
     try:
         new_channel_id = int(message.command[1])
         if new_channel_id in CHANNELS_LIST:
             await message.reply_text("Channel ID is already added.")
         else:
             CHANNELS_LIST.append(new_channel_id)
+            CHANNEL_OWNERS[new_channel_id] = message.from_user.id  # Assign the user as the owner of the channel
             # Update the environment variable (if needed)
             os.environ['CHANNELS'] = ','.join(map(str, CHANNELS_LIST))
-            await message.reply_text(f"Channel ID {new_channel_id} added to the list.")
+            await message.reply_text(f"Channel ID {new_channel_id} added to the list and you are now the owner.")
     except (IndexError, ValueError):
         await message.reply_text("Please provide a valid channel ID.")
 
 @bot.on_message(filters.command("remchannel") & filters.private)
 async def remove_channel(client: Client, message: Message):
-    if message.chat.id != OWNER:
-        return await message.reply_text("You are not authorized to use this command.")
-    
     try:
         channel_id_to_remove = int(message.command[1])
         if channel_id_to_remove not in CHANNELS_LIST:
             await message.reply_text("Channel ID is not in the list.")
+        elif CHANNEL_OWNERS.get(channel_id_to_remove) != message.from_user.id:
+            await message.reply_text("You are not the owner of this channel and cannot remove it.")
         else:
             CHANNELS_LIST.remove(channel_id_to_remove)
+            del CHANNEL_OWNERS[channel_id_to_remove]  # Remove the channel from the ownership dictionary
             # Update the environment variable (if needed)
             os.environ['CHANNELS'] = ','.join(map(str, CHANNELS_LIST))
             await message.reply_text(f"Channel ID {channel_id_to_remove} removed from the list.")
     except (IndexError, ValueError):
         await message.reply_text("Please provide a valid channel ID.")
-
+        
 @bot.on_message(filters.command("channels") & filters.private)
 async def list_channels(client: Client, message: Message):
     if message.chat.id != OWNER:
