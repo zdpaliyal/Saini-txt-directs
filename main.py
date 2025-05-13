@@ -47,6 +47,8 @@ bot = Client(
     bot_token=BOT_TOKEN
 )
 
+AUTH_USER = os.environ.get('AUTH_USERS', '5680454765').split(',')
+AUTH_USERS = [int(user_id) for user_id in AUTH_USER]
 cookies_file_path = os.getenv("cookies_file_path", "youtube_cookies.txt")
 api_url = "http://master-api-v3.vercel.app/"
 api_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNzkxOTMzNDE5NSIsInRnX3VzZXJuYW1lIjoi4p61IFtvZmZsaW5lXSIsImlhdCI6MTczODY5MjA3N30.SXzZ1MZcvMp5sGESj0hBKSghhxJ3k1GTWoBUbivUe1I"
@@ -80,6 +82,48 @@ image_urls = [
     # Add more image URLs as needed
 ]
 
+@bot.on_message(filters.command("addauth") & filters.private)
+async def add_auth_user(client: Client, message: Message):
+    if message.chat.id != OWNER:
+        return await message.reply_text("You are not authorized to use this command.")
+    
+    try:
+        new_user_id = int(message.command[1])
+        if new_user_id in AUTH_USERS:
+            await message.reply_text("User ID is already authorized.")
+        else:
+            AUTH_USERS.append(new_user_id)
+            # Update the environment variable (if needed)
+            os.environ['AUTH_USERS'] = ','.join(map(str, AUTH_USERS))
+            await message.reply_text(f"User ID {new_user_id} added to authorized users.")
+    except (IndexError, ValueError):
+        await message.reply_text("Please provide a valid user ID.")
+        
+@bot.on_message(filters.command("rmauth") & filters.private)
+async def remove_auth_user(client: Client, message: Message):
+    if message.chat.id != OWNER:
+        return await message.reply_text("You are not authorized to use this command.")
+    
+    try:
+        user_id_to_remove = int(message.command[1])
+        if user_id_to_remove not in AUTH_USERS:
+            await message.reply_text("User ID is not in the authorized users list.")
+        else:
+            AUTH_USERS.remove(user_id_to_remove)
+            # Update the environment variable (if needed)
+            os.environ['AUTH_USERS'] = ','.join(map(str, AUTH_USERS))
+            await message.reply_text(f"User ID {user_id_to_remove} removed from authorized users.")
+    except (IndexError, ValueError):
+        await message.reply_text("Please provide a valid user ID.")
+
+@bot.on_message(filters.command("users") & filters.private)
+async def list_auth_users(client: Client, message: Message):
+    if message.chat.id != OWNER:
+        return await message.reply_text("You are not authorized to use this command.")
+    
+    user_list = '\n'.join(map(str, AUTH_USERS))
+    await message.reply_text(f"<blockquote>Authorized Users:</blockquote>\n{user_list}")
+    
 @bot.on_message(filters.command("cookies") & filters.private)
 async def cookies_handler(client: Client, m: Message):
     await m.reply_text(
