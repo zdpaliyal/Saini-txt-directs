@@ -423,29 +423,12 @@ async def send_logs(client: Client, m: Message):  # Correct parameter name
         await m.reply_text(f"Error sending logs: {e}")
 
 @bot.on_message(filters.command(["drm"]) )
-async def txt_handler(bot: Client, m: Message):
-    # Debugging Logs
-    print(f"Message Type: {m.chat.type}")
-    print(f"User ID: {m.from_user.id}, Chat ID: {m.chat.id}")
-    print(f"Is User Authorized: {m.from_user.id in AUTH_USERS}")
-    print(f"Is Chat Authorized: {m.chat.id in CHANNELS_LIST}")
-
-    # Check if the command is used in a private chat
-    if m.chat.type == "private":
-        if m.from_user.id not in AUTH_USERS:
-            await m.reply_text(
-                "__**Oops, you are not authorized to use this command in private chat.**__"
-            )
-            return
-
-    # Check if the command is used in a group, supergroup, or channel
-    elif m.chat.type in ["group", "supergroup", "channel"]:
-        if m.chat.id not in CHANNELS_LIST:
-            await m.reply_text(
-                "__**Oops, this channel/group is not authorized to use this command.**__"
-            )
-            return
-
+async def txt_handler(bot: Client, m: Message):  
+    if m.chat.id not in AUTH_USERS or not in CHANNELS_LIST:
+        print(f"User ID not in AUTH_USERS", m.chat.id)
+        print(f"Channel ID not in CHANNELS_LIST", m.chat.id)
+        await m.reply_text(f"__**Oops, you are not authorized to use this command in private chat.**__")
+        return
     editable = await m.reply_text(f"**🔹Hi I am Poweful TXT Downloader📥 Bot.\n🔹Send me the txt file and wait.**")
     input: Message = await bot.listen(editable.chat.id)
     x = await input.download()
