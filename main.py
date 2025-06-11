@@ -228,7 +228,7 @@ async def text_to_txt(client, message: Message):
     editable = await message.reply_text(f"<blockquote>Welcome to the Text to .txt Converter!\nSend the **text** for convert into a `.txt` file.</blockquote>")
     input_message: Message = await bot.listen(message.chat.id)
     if not input_message.text:
-        await message.reply_text("🚨 **error**: Send valid text data")
+        await message.reply_text("Send valid text data")
         return
 
     text_data = input_message.text.strip()
@@ -441,7 +441,7 @@ async def txt_handler(bot: Client, m: Message):
     #if m.chat.id not in AUTH_USERS and m.chat.id not in CHANNELS_LIST:
         #print(f"User ID not in AUTH_USERS", m.chat.id)
         #print(f"Channel ID not in CHANNELS_LIST", m.chat.id)
-        #await m.reply_text(f"__**Oops, you are not authorized to use this command**__")
+        #await m.reply_text(f"<blockquote>__**Oopss! You are not a Premium member** __\n__**PLEASE UPGRADE YOUR PLAN**__\n__**Send me your user id for authorization**__\n__**Your User id**__ - `{m.chat.id}`</blockquote>\n")
         #return
     editable = await m.reply_text(f"**🔹Hi I am Poweful TXT Downloader📥 Bot.\n🔹Send me the txt file and wait.**")
     input: Message = await bot.listen(editable.chat.id)
@@ -543,7 +543,7 @@ async def txt_handler(bot: Client, m: Message):
     else:
         thumb = raw_text6
     await editable.delete()
-    await m.reply_text(f"__**🎯Target Batch : {b_name}**__")
+    await m.reply_text(f"<blockquote><b>🎯Target Batch : {b_name}</b></blockquote>")
 
     failed_count = 0
     count =int(raw_text)    
@@ -625,12 +625,12 @@ async def txt_handler(bot: Client, m: Message):
                 cmd = f'yt-dlp -f "{ytf}" "{url}" -o "{name}.mp4"'
 
             try:
-                cc = f'[——— ✦ {str(count).zfill(3)} ✦ ———]({link0})\n\n**🎞️ Title :** `{name1}`\n**├── Extention :**  {CR} .mkv\n**├── Resolution :** [{res}]\n\n**📚 Course :** {b_name}\n\n**🌟 Extracted By :** {CR}'
-                cc1 = f'[——— ✦ {str(count).zfill(3)} ✦ ———]({link0})\n\n**📁 Title :** `{name1}`\n**├── Extention :**  {CR} .pdf\n\n**📚 Course :** {b_name}\n\n**🌟 Extracted By :** {CR}'
-                cczip = f'[——— ✦ {str(count).zfill(3)} ✦ ———]({link0})\n\n**📁 Title :** `{name1}`\n**├── Extention :**  {CR} .zip\n\n**📚 Course :** {b_name}\n\n**🌟 Extracted By :** {CR}'
-                ccimg = f'[——— ✦ {str(count).zfill(3)} ✦ ———]({link0})\n\n**🖼️ Title :** `{name1}`\n**├── Extention :**  {CR} .jpg\n\n**📚 Course :** {b_name}\n\n**🌟 Extracted By :** {CR}'
-                ccm = f'[——— ✦ {str(count).zfill(3)} ✦ ———]({link0})\n\n**🎵 Title :** `{name1}`\n**├── Extention :**  {CR} .mp3\n\n**📚 Course :** {b_name}\n\n**🌟 Extracted By :** {CR}'
-                cchtml = f'[——— ✦ {str(count).zfill(3)} ✦ ———]({link0})\n\n**🌐 Title :** `{name1}`\n**├── Extention :**  {CR} .html\n\n**📚 Course :** {b_name}\n\n**🌟 Extracted By :** {CR}'
+                cc = f'[——— ✦ {str(count).zfill(3)} ✦ ———]({link0})\n\n**🎞️ Title :** `{name1}`\n**├── Extention :**  {CR} .mkv\n**├── Resolution :** [{res}]\n\n<blockquote><b>📚 Course :</b> {b_name}</blockquote>\n\n**🌟 Extracted By :** {CR}'
+                cc1 = f'[——— ✦ {str(count).zfill(3)} ✦ ———]({link0})\n\n**📁 Title :** `{name1}`\n**├── Extention :**  {CR} .pdf\n\n<blockquote><b>📚 Course :</b> {b_name}</blockquote>\n\n**🌟 Extracted By :** {CR}'
+                cczip = f'[——— ✦ {str(count).zfill(3)} ✦ ———]({link0})\n\n**📁 Title :** `{name1}`\n**├── Extention :**  {CR} .zip\n\n<blockquote><b>📚 Course :</b> {b_name}</blockquote>\n\n**🌟 Extracted By :** {CR}'
+                ccimg = f'[——— ✦ {str(count).zfill(3)} ✦ ———]({link0})\n\n**🖼️ Title :** `{name1}`\n**├── Extention :**  {CR} .jpg\n\n<blockquote><b>📚 Course :</b> {b_name}</blockquote>\n\n**🌟 Extracted By :** {CR}'
+                ccm = f'[——— ✦ {str(count).zfill(3)} ✦ ———]({link0})\n\n**🎵 Title :** `{name1}`\n**├── Extention :**  {CR} .mp3\n\n<blockquote><b>📚 Course :</b> {b_name}</blockquote>\n\n**🌟 Extracted By :** {CR}'
+                cchtml = f'[——— ✦ {str(count).zfill(3)} ✦ ———]({link0})\n\n**🌐 Title :** `{name1}`\n**├── Extention :**  {CR} .html\n\n<blockquote><b>📚 Course :</b> {b_name}</blockquote>\n\n**🌟 Extracted By :** {CR}'
 
                 if "drive" in url:
                     try:
@@ -753,15 +753,15 @@ async def txt_handler(bot: Client, m: Message):
                     remaining_links = len(links) - count
                     progress = (count / len(links)) * 100
                     emoji_message = await show_random_emojis(message)
-                    Show = f"🚀𝐏𝐫𝐨𝐠𝐫𝐞𝐬𝐬 » {progress:.2f}%\n┃\n" \
+                    Show = f"<blockquote>🚀𝐏𝐫𝐨𝐠𝐫𝐞𝐬𝐬 » {progress:.2f}%</blockquote>\n┃\n" \
                            f"┣🔗𝐈𝐧𝐝𝐞𝐱 » {count}/{len(links)}\n┃\n" \
                            f"╰━🖇️𝐑𝐞𝐦𝐚𝐢𝐧 » {remaining_links}\n" \
                            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
-                           f"**⚡Dᴏᴡɴʟᴏᴀᴅɪɴɢ Eɴᴄʀʏᴘᴛᴇᴅ Sᴛᴀʀᴛᴇᴅ...⏳**\n┃\n" \
+                           f"<blockquote><b>⚡Dᴏᴡɴʟᴏᴀᴅɪɴɢ Eɴᴄʀʏᴘᴛᴇᴅ Sᴛᴀʀᴛᴇᴅ...⏳</b></blockquote>\n┃\n" \
                            f'┣💃𝐂𝐫𝐞𝐝𝐢𝐭 » {CR}\n┃\n' \
                            f"╰━📚𝐁𝐚𝐭𝐜𝐡 » {b_name}\n" \
                            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
-                           f"📚𝐓𝐢𝐭𝐥𝐞 » {name}\n┃\n" \
+                           f"<blockquote>📚𝐓𝐢𝐭𝐥𝐞 » {name}</blockquote>\n┃\n" \
                            f"┣🍁𝐐𝐮𝐚𝐥𝐢𝐭𝐲 » {quality}\n┃\n" \
                            f'┣━🔗𝐋𝐢𝐧𝐤 » <a href="{link0}">**Original Link**</a>\n┃\n' \
                            f'╰━━🖇️𝐔𝐫𝐥 » <a href="{url}">**Api Link**</a>\n' \
@@ -782,15 +782,15 @@ async def txt_handler(bot: Client, m: Message):
                     remaining_links = len(links) - count
                     progress = (count / len(links)) * 100
                     emoji_message = await show_random_emojis(message)
-                    Show = f"🚀𝐏𝐫𝐨𝐠𝐫𝐞𝐬𝐬 » {progress:.2f}%\n┃\n" \
+                    Show = f"<blockquote>🚀𝐏𝐫𝐨𝐠𝐫𝐞𝐬𝐬 » {progress:.2f}%</blockquote>\n┃\n" \
                            f"┣🔗𝐈𝐧𝐝𝐞𝐱 » {count}/{len(links)}\n┃\n" \
                            f"╰━🖇️𝐑𝐞𝐦𝐚𝐢𝐧 » {remaining_links}\n" \
                            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
-                           f"**⚡Dᴏᴡɴʟᴏᴀᴅɪɴɢ Dʀᴍ Sᴛᴀʀᴛᴇᴅ...⏳**\n┃\n" \
+                           f"<blockquote><b>⚡Dᴏᴡɴʟᴏᴀᴅɪɴɢ Eɴᴄʀʏᴘᴛᴇᴅ Sᴛᴀʀᴛᴇᴅ...⏳</b></blockquote>\n┃\n" \
                            f'┣💃𝐂𝐫𝐞𝐝𝐢𝐭 » {CR}\n┃\n' \
                            f"╰━📚𝐁𝐚𝐭𝐜𝐡 » {b_name}\n" \
                            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
-                           f"📚𝐓𝐢𝐭𝐥𝐞 » {name}\n┃\n" \
+                           f"<blockquote>📚𝐓𝐢𝐭𝐥𝐞 » {name}</blockquote>\n┃\n" \
                            f"┣🍁𝐐𝐮𝐚𝐥𝐢𝐭𝐲 » {quality}\n┃\n" \
                            f'┣━🔗𝐋𝐢𝐧𝐤 » <a href="{link0}">**Original Link**</a>\n┃\n' \
                            f'╰━━🖇️𝐔𝐫𝐥 » <a href="{url}">**Api Link**</a>\n' \
@@ -811,15 +811,15 @@ async def txt_handler(bot: Client, m: Message):
                     remaining_links = len(links) - count
                     progress = (count / len(links)) * 100
                     emoji_message = await show_random_emojis(message)
-                    Show = f"🚀𝐏𝐫𝐨𝐠𝐫𝐞𝐬𝐬 » {progress:.2f}%\n┃\n" \
+                    Show = f"<blockquote>🚀𝐏𝐫𝐨𝐠𝐫𝐞𝐬𝐬 » {progress:.2f}%</blockquote>\n┃\n" \
                            f"┣🔗𝐈𝐧𝐝𝐞𝐱 » {count}/{len(links)}\n┃\n" \
                            f"╰━🖇️𝐑𝐞𝐦𝐚𝐢𝐧 » {remaining_links}\n" \
                            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
-                           f"**⚡Dᴏᴡɴʟᴏᴀᴅɪɴɢ Sᴛᴀʀᴛᴇᴅ...⏳**\n┃\n" \
+                           f"<blockquote><b>⚡Dᴏᴡɴʟᴏᴀᴅɪɴɢ Eɴᴄʀʏᴘᴛᴇᴅ Sᴛᴀʀᴛᴇᴅ...⏳</b></blockquote>\n┃\n" \
                            f'┣💃𝐂𝐫𝐞𝐝𝐢𝐭 » {CR}\n┃\n' \
                            f"╰━📚𝐁𝐚𝐭𝐜𝐡 » {b_name}\n" \
                            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
-                           f"📚𝐓𝐢𝐭𝐥𝐞 » {name}\n┃\n" \
+                           f"<blockquote>📚𝐓𝐢𝐭𝐥𝐞 » {name}</blockquote>\n┃\n" \
                            f"┣🍁𝐐𝐮𝐚𝐥𝐢𝐭𝐲 » {quality}\n┃\n" \
                            f'┣━🔗𝐋𝐢𝐧𝐤 » <a href="{link0}">**Original Link**</a>\n┃\n' \
                            f'╰━━🖇️𝐔𝐫𝐥 » <a href="{url}">**Api Link**</a>\n' \
@@ -836,7 +836,7 @@ async def txt_handler(bot: Client, m: Message):
                     time.sleep(1)
                 
             except Exception as e:
-                await m.reply_text(f'⚠️**Downloading Failed**⚠️\n**Name** =>> `{str(count).zfill(3)} {name1}`\n**Url** =>> {link0}\n\n<pre><i><b>Failed Reason: {str(e)}</b></i></pre>', disable_web_page_preview=True)
+                await m.reply_text(f'⚠️**Downloading Failed**⚠️\n**Name** =>> `{str(count).zfill(3)} {name1}`\n**Url** =>> {link0}\n\n<blockquote><b>Failed Reason:\n{str(e)}</b></blockquote>', disable_web_page_preview=True)
                 count += 1
                 failed_count += 1
                 continue
@@ -846,7 +846,7 @@ async def txt_handler(bot: Client, m: Message):
         time.sleep(2)
 
     await m.reply_text(f"⋅ ─ Total failed links is {failed_count} ─ ⋅")
-    await m.reply_text(f"⋅ ─ list index ({raw_text}-{len(links)}) out of range ─ ⋅\n\n✨ **BATCH** » {b_name}✨\n\n⋅ ─ DOWNLOADING ✩ COMPLETED ─ ⋅")
+    await m.reply_text(f"⋅ ─ list index ({raw_text}-{len(links)}) out of range ─ ⋅\n\n<blockquote>✨BATCH</b> » {b_name}✨</blockquote>\n\n⋅ ─ DOWNLOADING ✩ COMPLETED ─ ⋅")
 
 @bot.on_message(filters.text & filters.private)
 async def text_handler(bot: Client, m: Message):
@@ -891,7 +891,8 @@ async def text_handler(bot: Client, m: Message):
     raw_text4 = input4.text
     await input4.delete(True)
     await editable.delete(True)
-     
+
+    raw_text4 = "PW_TOKEN"
     thumb = "/d"
     count =0
     arg =1
