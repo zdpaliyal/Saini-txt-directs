@@ -595,16 +595,28 @@ async def txt_handler(bot: Client, m: Message):
     await editable.edit(f"**🔹Total 🔗 links found are {len(links)}\n\n🔹Img : {img_count}  🔹PDF : {pdf_count}\n🔹ZIP : {zip_count}  🔹Other : {other_count}\n\n🔹Send From where you want to download.**")
     input0: Message = await bot.listen(editable.chat.id)
     raw_text = input0.text
-    await input0.delete(True)
-           
-    await editable.edit("**🔹Enter Your Batch Name\n🔹Send 1 for use default.**")
-    input1: Message = await bot.listen(editable.chat.id)
-    raw_text0 = input1.text
-    await input1.delete(True)
+
+    if int(input0.text) > len(links) :
+        await editable.edit(f"**🔹Enter number in range of Index**")
+        processing_request = False  # Reset the processing flag
+        await m.reply_text("**🔹Exiting Task......  **")
+        return
+    else:
+        await input0.delete(True)
+
+    await editable.edit(f"**🔹Enter Batch Name**\n\n**🔹Please wait...10sec...⏳ for use**\n\n🔹𝐍𝐚𝐦𝐞 » __**{file_name}__**")
+    try:
+        input1: Message = await bot.listen(editable.chat.id, timeout=10)
+        raw_text0 = input1.text
+        await input1.delete(True)
+    except asyncio.TimeoutError:
+        raw_text0 = '1'
+    
     if raw_text0 == '1':
         b_name = file_name.replace('_', ' ')
     else:
         b_name = raw_text0
+
 
     await editable.edit(f"**╭━━━━❰ᴇɴᴛᴇʀ ʀᴇꜱᴏʟᴜᴛɪᴏɴ❱━━➣ \n┣━━⪼ send `144`  for 144p\n┣━━⪼ send `240`  for 240p\n┣━━⪼ send `360`  for 360p\n┣━━⪼ send `480`  for 480p\n┣━━⪼ send `720`  for 720p\n┣━━⪼ send `1080` for 1080p\n╰━━⌈⚡[`🦋{CREDIT}🦋`]⚡⌋━━➣**")
     input2: Message = await bot.listen(editable.chat.id)
@@ -629,24 +641,34 @@ async def txt_handler(bot: Client, m: Message):
     except Exception:
             res = "UN"
 
-    await editable.edit("**🔹Enter Your Name\n🔹Send 1 for use default**")
-    input3: Message = await bot.listen(editable.chat.id)
-    raw_text3 = input3.text
-    await input3.delete(True)
+    await editable.edit("**🔹Enter Your Name**\n\n**🔹Please wait..10sec...⏳ for use default**\n\n🔹𝐍𝐚𝐦𝐞 » __**{CREDIT}**__")
+    try:
+        input3: Message = await bot.listen(editable.chat.id, timeout=10)
+        raw_text3 = input3.text
+        await input3.delete(True)
+    except asyncio.TimeoutError:
+        raw_text3 = '1'
+
     if raw_text3 == '1':
         CR = f"{CREDIT}"
     else:
         CR = raw_text3
 
-    await editable.edit("**🔹Enter Your PW Token For 𝐌𝐏𝐃 𝐔𝐑𝐋\n🔹Send /anything for use default**")
-    input4: Message = await bot.listen(editable.chat.id)
-    raw_text4 = input4.text
-    await input4.delete(True)
+    await editable.edit("**🔹Enter Working **PW Token** For 𝐌𝐏𝐃 𝐔𝐑𝐋**\n**🔹Please wait..5sec...⏳ for use default**")
+    try:
+        input4: Message = await bot.listen(editable.chat.id, timeout=5)
+        raw_text4 = input4.text
+        await input4.delete(True)
+    except asyncio.TimeoutError:
+        raw_text4 = 'WOTKING_PW_TOKEN'
 
-    await editable.edit(f"**🔹Send the Video Thumb URL\n🔹Send /d for use default\n\n🔹You can direct upload thumb\n🔹Send **No** for use default**")
-    input6 = message = await bot.listen(editable.chat.id)
-    raw_text6 = input6.text
-    await input6.delete(True)
+    await editable.edit(f"**🔹Send the Video Thumb URL\n🔹Send /d for use default\n\n🔹You can direct upload thumb\n🔹Send **No** for use default**\n\n**🔹Please wait..5sec...⏳ for use default**")
+    try:
+        input6: Message = await bot.listen(editable.chat.id, timeout=5)
+        raw_text6 = input6.text
+        await input6.delete(True)
+    except asyncio.TimeoutError:
+        raw_text6 = 'no'
 
     if input6.photo:
         thumb = await input6.download()  # Use the photo sent by the user
