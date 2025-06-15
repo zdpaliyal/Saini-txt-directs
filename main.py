@@ -588,9 +588,9 @@ async def txt_handler(bot: Client, m: Message):
         os.remove(x)
         return
     
-    await editable.edit(f"**🔹Total 🔗 links found are {len(links)}\n🔹Img : {img_count}  🔹PDF : {pdf_count}\n🔹ZIP : {zip_count}  🔹Other : {other_count}\n🔹Send From where you want to download\n\n🔹Please wait...5sec...⏳ for download from starting**")
+    await editable.edit(f"**🔹Total 🔗 links found are {len(links)}\n🔹Img : {img_count}  🔹PDF : {pdf_count}\n🔹ZIP : {zip_count}  🔹Other : {other_count}\n🔹Send From where you want to download. Initial is 1\n\n🔹Please wait...15sec...⏳ for download from starting**")
     try:
-        input0: Message = await bot.listen(editable.chat.id, timeout=5)
+        input0: Message = await bot.listen(editable.chat.id, timeout=15)
         raw_text = input0.text
         await input0.delete(True)
     except asyncio.TimeoutError:
@@ -602,21 +602,21 @@ async def txt_handler(bot: Client, m: Message):
         await m.reply_text("**🔹Exiting Task......  **")
         return
     
-    await editable.edit(f"**🔹Enter Batch Name**\n\n**🔹Please wait...7sec...⏳ for use**\n\n🔹**Name** » __**{file_name}__**")
+    await editable.edit(f"**🔹Enter Batch Name or send /d for use default**\n\n**🔹Please wait...30sec...⏳ for use**\n\n🔹**Name** » __**{file_name}__**")
     try:
-        input1: Message = await bot.listen(editable.chat.id, timeout=7)
+        input1: Message = await bot.listen(editable.chat.id, timeout=30)
         raw_text0 = input1.text
         await input1.delete(True)
     except asyncio.TimeoutError:
-        raw_text0 = '1'
+        raw_text0 = '/d'
     
-    if raw_text0 == '1':
+    if raw_text0 == '/d':
         b_name = file_name.replace('_', ' ')
     else:
         b_name = raw_text0
 
 
-    await editable.edit(f"**╭━━━━❰ᴇɴᴛᴇʀ ʀᴇꜱᴏʟᴜᴛɪᴏɴ❱━━➣ \n┣━━⪼ send `144`  for 144p\n┣━━⪼ send `240`  for 240p\n┣━━⪼ send `360`  for 360p\n┣━━⪼ send `480`  for 480p\n┣━━⪼ send `720`  for 720p\n┣━━⪼ send `1080` for 1080p\n╰━━⌈⚡[`🦋{CREDIT}🦋`]⚡⌋━━➣\n\n🔹Please wait...5sec...⏳ for 480p**")
+    await editable.edit(f"**╭━━━━❰ᴇɴᴛᴇʀ ʀᴇꜱᴏʟᴜᴛɪᴏɴ❱━━➣ \n┣━━⪼ send `144`  for 144p\n┣━━⪼ send `240`  for 240p\n┣━━⪼ send `360`  for 360p\n┣━━⪼ send `480`  for 480p\n┣━━⪼ send `720`  for 720p\n┣━━⪼ send `1080` for 1080p\n╰━━⌈⚡[`🦋{CREDIT}🦋`]⚡⌋━━➣\n\n🔹Please wait...10sec...⏳ for 480p**")
     try:
         input2: Message = await bot.listen(editable.chat.id, timeout=10)
         raw_text2 = input2.text
@@ -642,9 +642,9 @@ async def txt_handler(bot: Client, m: Message):
     except Exception:
             res = "UN"
 
-    await editable.edit(f"**🔹Enter Your Name**\n\n**🔹Please wait..10sec...⏳ for use default**\n\n🔹**Credit** » __**{CREDIT}**__")
+    await editable.edit(f"**🔹Enter Your Name or send /d for use default**\n\n**🔹Please wait..30sec...⏳ for use default**\n\n🔹**Credit** » __**{CREDIT}**__")
     try:
-        input3: Message = await bot.listen(editable.chat.id, timeout=10)
+        input3: Message = await bot.listen(editable.chat.id, timeout=30)
         raw_text3 = input3.text
         await input3.delete(True)
     except asyncio.TimeoutError:
@@ -655,17 +655,17 @@ async def txt_handler(bot: Client, m: Message):
     else:
         CR = raw_text3
 
-    await editable.edit("**🔹Enter Working **PW Token** For 𝐌𝐏𝐃 𝐔𝐑𝐋**\n**🔹Please wait..5sec...⏳ for use default**")
+    await editable.edit("**🔹Enter Working **PW Token** For 𝐌𝐏𝐃 𝐔𝐑𝐋**\n**🔹Please wait..10sec...⏳ for use default**")
     try:
-        input4: Message = await bot.listen(editable.chat.id, timeout=5)
+        input4: Message = await bot.listen(editable.chat.id, timeout=10)
         raw_text4 = input4.text
         await input4.delete(True)
     except asyncio.TimeoutError:
         raw_text4 = 'WOTKING_PW_TOKEN'
 
-    await editable.edit(f"**🔹Send the Video Thumb URL\n🔹Please wait..5sec...⏳ for use default**")
+    await editable.edit(f"**🔹Send the Video Thumb URL or send /d for use default\n🔹Please wait..20sec...⏳ for use default**")
     try:
-        input6: Message = await bot.listen(editable.chat.id, timeout=5)
+        input6: Message = await bot.listen(editable.chat.id, timeout=20)
         raw_text6 = input6.text
         await input6.delete(True)
     except asyncio.TimeoutError:
