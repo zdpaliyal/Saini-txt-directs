@@ -678,8 +678,16 @@ async def txt_handler(bot: Client, m: Message):
     else:
         thumb = raw_text6
     await editable.delete()
-    await m.reply_text(f"<blockquote><b>🎯Target Batch : {b_name}</b></blockquote>")
-
+    
+    batch_msg = await m.reply_text(f"<blockquote><b>🎯Target Batch : {b_name}</b></blockquote>")
+    await m.chat.pin_message(batch_msg.message_id)
+    pinned = await m.chat.get_pinned_message()
+    if pinned and pinned.message_id != batch_msg.message_id:
+        try:
+            await pinned.delete()
+        except Exception as e:
+            print(f"Failed to delete pinned notification: {e}")
+           
     failed_count = 0
     count =int(raw_text)    
     arg = int(raw_text)
