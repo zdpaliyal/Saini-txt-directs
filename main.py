@@ -51,14 +51,18 @@ AUTH_USER = os.environ.get('AUTH_USERS', '5680454765').split(',')
 AUTH_USERS = [int(user_id) for user_id in AUTH_USER]
 if int(OWNER) not in AUTH_USERS:
     AUTH_USERS.append(int(OWNER))
+    
 CHANNEL_OWNERS = {}
 CHANNELS = os.environ.get('CHANNELS', '').split(',')
 CHANNELS_LIST = [int(channel_id) for channel_id in CHANNELS if channel_id.isdigit()]
+
 cookies_file_path = os.getenv("cookies_file_path", "youtube_cookies.txt")
+
 api_url = "http://master-api-v3.vercel.app/"
 api_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNzkxOTMzNDE5NSIsInRnX3VzZXJuYW1lIjoi4p61IFtvZmZsaW5lXSIsImlhdCI6MTczODY5MjA3N30.SXzZ1MZcvMp5sGESj0hBKSghhxJ3k1GTWoBUbivUe1I"
 token_cp ='eyJjb3Vyc2VJZCI6IjQ1NjY4NyIsInR1dG9ySWQiOm51bGwsIm9yZ0lkIjo0ODA2MTksImNhdGVnb3J5SWQiOm51bGx9r'
 adda_token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJkcGthNTQ3MEBnbWFpbC5jb20iLCJhdWQiOiIxNzg2OTYwNSIsImlhdCI6MTc0NDk0NDQ2NCwiaXNzIjoiYWRkYTI0Ny5jb20iLCJuYW1lIjoiZHBrYSIsImVtYWlsIjoiZHBrYTU0NzBAZ21haWwuY29tIiwicGhvbmUiOiI3MzUyNDA0MTc2IiwidXNlcklkIjoiYWRkYS52MS41NzMyNmRmODVkZDkxZDRiNDkxN2FiZDExN2IwN2ZjOCIsImxvZ2luQXBpVmVyc2lvbiI6MX0.0QOuYFMkCEdVmwMVIPeETa6Kxr70zEslWOIAfC_ylhbku76nDcaBoNVvqN4HivWNwlyT0jkUKjWxZ8AbdorMLg"
+
 photologo = 'https://tinypic.host/images/2025/02/07/DeWatermark.ai_1738952933236-1.png' #https://envs.sh/GV0.jpg
 photoyt = 'https://tinypic.host/images/2025/03/18/YouTube-Logo.wine.png' #https://envs.sh/GVi.jpg
 photocp = 'https://tinypic.host/images/2025/03/28/IMG_20250328_133126.jpg'
@@ -67,14 +71,9 @@ photozip = 'https://envs.sh/cD_.jpg'
 
 # Inline keyboard for start command
 BUTTONSCONTACT = InlineKeyboardMarkup([[InlineKeyboardButton(text="📞 Contact", url="https://t.me/saini_contact_bot")]])
-keyboard = InlineKeyboardMarkup(
-    [
-        [
-            InlineKeyboardButton(text="🛠️ Help", url="https://t.me/+3k-1zcJxINYwNGZl"),
-            InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/cyberseller999/saini-txt-direct"),
-        ],
-    ]
-)
+keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton(text="🛠️ Help", url="https://t.me/+3k-1zcJxINYwNGZl"), InlineKeyboardButton(text="🛠️ Repo", url="https://github.com/cyberseller999/saini-txt-direct")],
+])
 
 # Image URLs for the random image feature
 image_urls = [
@@ -86,67 +85,67 @@ image_urls = [
 @bot.on_message(filters.command("addauth") & filters.private)
 async def add_auth_user(client: Client, message: Message):
     if message.chat.id != OWNER:
-        return await message.reply_text("You are not authorized to use this command.")
+        return await message.reply_text("**This command only for bot Owner**")
     
     try:
         new_user_id = int(message.command[1])
         if new_user_id in AUTH_USERS:
-            await message.reply_text("User ID is already authorized.")
+            await message.reply_text("**User ID is already authorized.**")
         else:
             AUTH_USERS.append(new_user_id)
             # Update the environment variable (if needed)
             os.environ['AUTH_USERS'] = ','.join(map(str, AUTH_USERS))
-            await message.reply_text(f"User ID {new_user_id} added to authorized users.")
+            await message.reply_text(f"**User ID `{new_user_id}` added to authorized users.**")
     except (IndexError, ValueError):
-        await message.reply_text("Please provide a valid user ID.")
+        await message.reply_text("**Please provide a valid user ID.**")
         
 @bot.on_message(filters.command("remauth") & filters.private)
 async def remove_auth_user(client: Client, message: Message):
     if message.chat.id != OWNER:
-        return await message.reply_text("You are not authorized to use this command.")
+        return await message.reply_text("**This command only for bot Owner**")
     
     try:
         user_id_to_remove = int(message.command[1])
         if user_id_to_remove not in AUTH_USERS:
-            await message.reply_text("User ID is not in the authorized users list.")
+            await message.reply_text("**User ID is not in the authorized users list.**")
         else:
             AUTH_USERS.remove(user_id_to_remove)
             # Update the environment variable (if needed)
             os.environ['AUTH_USERS'] = ','.join(map(str, AUTH_USERS))
-            await message.reply_text(f"User ID {user_id_to_remove} removed from authorized users.")
+            await message.reply_text(f"**User ID `{user_id_to_remove}` removed from authorized users.**")
     except (IndexError, ValueError):
-        await message.reply_text("Please provide a valid user ID.")
+        await message.reply_text("**Please provide a valid user ID.**")
 
 @bot.on_message(filters.command("users") & filters.private)
 async def list_auth_users(client: Client, message: Message):
     if message.chat.id != OWNER:
-        return await message.reply_text("You are not authorized to use this command.")
+        return await message.reply_text("**This command only for bot Owner**")
     
     user_list = '\n'.join(map(str, AUTH_USERS))
-    await message.reply_text(f"<blockquote>Authorized Users:</blockquote>\n{user_list}")
+    await message.reply_text(f"<blockquote><b>Authorized Users:</b></blockquote>\n\n<blockquote>{user_list}</blockquote>")
 
 @bot.on_message(filters.command("addchnl") & filters.private)
 async def add_channel(client: Client, message: Message):
     if message.from_user.id not in AUTH_USERS:
-        return await message.reply_text("You are not authorized to use this command.")
+        return await message.reply_text("**This command only for Authorised Users**")
 
     try:
         new_channel_id = int(message.command[1])
         
         # Validate that the channel ID starts with -100
         if not str(new_channel_id).startswith("-100"):
-            return await message.reply_text("Invalid channel ID. Channel IDs must start with -100.")
+            return await message.reply_text("**Invalid channel ID. Channel IDs must start with -100.**")
         
         if new_channel_id in CHANNELS_LIST:
-            await message.reply_text("Channel ID is already added.")
+            await message.reply_text("**Channel ID is already added.**")
         else:
             CHANNELS_LIST.append(new_channel_id)
             CHANNEL_OWNERS[new_channel_id] = message.from_user.id  # Assign the user as the owner of the channel
             # Update the environment variable (if needed)
             os.environ['CHANNELS'] = ','.join(map(str, CHANNELS_LIST))
-            await message.reply_text(f"Channel ID {new_channel_id} added to the list and you are now the owner.")
+            await message.reply_text(f"**Channel ID `{new_channel_id}` added to the list and you are now the owner of this channel.**")
     except (IndexError, ValueError):
-        await message.reply_text("Please provide a valid channel ID.")
+        await message.reply_text("**Please provide a valid channel ID.**")
 
 @bot.on_message(filters.command("remchnl") & filters.private)
 async def remove_channel(client: Client, message: Message):
@@ -155,11 +154,11 @@ async def remove_channel(client: Client, message: Message):
         
         # Check if the channel exists in the list
         if channel_id_to_remove not in CHANNELS_LIST:
-            return await message.reply_text("Channel ID is not in the list.")
+            return await message.reply_text("**Channel ID is not in the list.**")
         
         # Check if the user is the OWNER or the channel owner
         if message.from_user.id != OWNER and CHANNEL_OWNERS.get(channel_id_to_remove) != message.from_user.id:
-            return await message.reply_text("You are not authorized to remove this channel.")
+            return await message.reply_text("**This channel is not added by you.**")
 
         # Remove the channel
         CHANNELS_LIST.remove(channel_id_to_remove)
@@ -168,27 +167,24 @@ async def remove_channel(client: Client, message: Message):
         
         # Update the environment variable (if needed)
         os.environ['CHANNELS'] = ','.join(map(str, CHANNELS_LIST))
-        await message.reply_text(f"Channel ID {channel_id_to_remove} removed from the list.")
+        await message.reply_text(f"**Channel ID `{channel_id_to_remove}` removed from the list.**")
     except (IndexError, ValueError):
-        await message.reply_text("Please provide a valid channel ID.")
+        await message.reply_text("**Please provide a valid channel ID.**")
 
 @bot.on_message(filters.command("channels") & filters.private)
 async def list_channels(client: Client, message: Message):
     if message.chat.id != OWNER:
-        return await message.reply_text("You are not authorized to use this command.")
+        return await message.reply_text("**This command only for bot Owner**")
     
     if not CHANNELS_LIST:
-        await message.reply_text("No channels have been added yet.")
+        await message.reply_text("**No channels have been added yet.**")
     else:
         channel_list = '\n'.join(map(str, CHANNELS_LIST))
-        await message.reply_text(f"<blockquote>Authorized Channels:</blockquote>\n{channel_list}")
+        await message.reply_text(f"<blockquote><b>Authorized Channels:</b></blockquote>\n\n<blockquote><b>{channel_list}</b></blockquote>")
         
 @bot.on_message(filters.command("cookies") & filters.private)
 async def cookies_handler(client: Client, m: Message):
-    await m.reply_text(
-        "Please upload the cookies file (.txt format).",
-        quote=True
-    )
+    await m.reply_text("**Upload cookies file in .txt format.**")
 
     try:
         # Wait for the user to send the cookies file
@@ -196,7 +192,7 @@ async def cookies_handler(client: Client, m: Message):
 
         # Validate the uploaded file
         if not input_message.document or not input_message.document.file_name.endswith(".txt"):
-            await m.reply_text("Invalid file type. Please upload a .txt file.")
+            await m.reply_text("**Invalid file type. Please upload a .txt file.**")
             return
 
         # Download the cookies file
@@ -215,16 +211,16 @@ async def cookies_handler(client: Client, m: Message):
         )
 
     except Exception as e:
-        await m.reply_text(f"⚠️ An error occurred: {str(e)}")
+        await m.reply_text(f"__**Failed Reason:**__\n<blockquote><b>{str(e)}</b></blockquote>")
 
 @bot.on_message(filters.command(["t2t"]))
 async def text_to_txt(client, message: Message):
     user_id = str(message.from_user.id)
     # Inform the user to send the text data and its desired file name
-    editable = await message.reply_text(f"<blockquote>Welcome to the Text to .txt Converter!\nSend the **text** for convert into a `.txt` file.</blockquote>")
+    editable = await message.reply_text(f"<blockquote><b>Welcome to the Text to .txt Converter!\nSend the **text** for convert into a `.txt` file.</b></blockquote>")
     input_message: Message = await bot.listen(message.chat.id)
     if not input_message.text:
-        await message.reply_text("Send valid text data")
+        await message.reply_text("**Send valid text data**")
         return
 
     text_data = input_message.text.strip()
@@ -257,9 +253,7 @@ EDITED_FILE_PATH = '/path/to/save/edited_output.txt'
 async def youtube_to_txt(client, message: Message):
     user_id = str(message.from_user.id)
     
-    editable = await message.reply_text(
-        f"Send YouTube Website/Playlist link for convert in .txt file"
-    )
+    editable = await message.reply_text(f"**Send YouTube Playlist link for convert in .txt file**")
 
     input_message: Message = await bot.listen(message.chat.id)
     youtube_link = input_message.text.strip()
@@ -285,7 +279,7 @@ async def youtube_to_txt(client, message: Message):
                 title = result.get('title', 'youtube_video')
         except yt_dlp.utils.DownloadError as e:
             await message.reply_text(
-                f"<pre><code>🚨 Error occurred {str(e)}</code></pre>"
+                f"**__Failed Reason:__\n<blockquote>{str(e)}</blockquote>**"
             )
             return
 
@@ -310,7 +304,7 @@ async def youtube_to_txt(client, message: Message):
     # Send the generated text file to the user with a pretty caption
     await message.reply_document(
         document=txt_file,
-        caption=f'<a href="{youtube_link}">__**Click Here to Open Link**__</a>\n<pre><code>{title}.txt</code></pre>\n'
+        caption=f'<a href="{youtube_link}">__**Click Here to Open Link**__</a>\n<blockquote>{title}.txt</blockquote>\n'
     )
 
     # Remove the temporary text file after sending
@@ -321,24 +315,15 @@ m_file_path= "main.py"
 @bot.on_message(filters.command("getcookies") & filters.private)
 async def getcookies_handler(client: Client, m: Message):
     try:
-        # Send the cookies file to the user
-        await client.send_document(
-            chat_id=m.chat.id,
-            document=cookies_file_path,
-            caption="Here is the `youtube_cookies.txt` file."
-        )
+        await client.send_document(chat_id=m.chat.id, document=cookies_file_path, caption="Here is the `youtube_cookies.txt` file.")
     except Exception as e:
-        await m.reply_text(f"⚠️ An error occurred: {str(e)}")     
+        await m.reply_text(f"**Failed Reason:\n<blockquote>{str(e)}</blockquote>**")     
 @bot.on_message(filters.command("mfile") & filters.private)
 async def getcookies_handler(client: Client, m: Message):
     try:
-        await client.send_document(
-            chat_id=m.chat.id,
-            document=m_file_path,
-            caption="Here is the `main.py` file."
-        )
+        await client.send_document(chat_id=m.chat.id, document=m_file_path, caption="Here is the `main.py` file.")
     except Exception as e:
-        await m.reply_text(f"⚠️ An error occurred: {str(e)}")
+        await m.reply_text(f"**Failed Reason:\n<blockquote>{str(e)}</blockquote>**")
 
 @bot.on_message(filters.command(["ytm"]))
 async def txt_handler(bot: Client, m: Message):
@@ -365,7 +350,7 @@ async def txt_handler(bot: Client, m: Message):
         f"**ᴛᴏᴛᴀʟ 🔗 ʟɪɴᴋs ғᴏᴜɴᴅ ᴀʀᴇ --__{len(links)}__--**\n"
     )
     
-    await editable.edit("**🔹sᴇɴᴅ ғʀᴏᴍ ᴡʜᴇʀᴇ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ**\n\n**🔹Please wait..10sec...⏳**\n\n**🔹For Download from Starting**")
+    await editable.edit("**🔹sᴇɴᴅ ғʀᴏᴍ ᴡʜᴇʀᴇ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ**")
     try:
         input0: Message = await bot.listen(editable.chat.id, timeout=10)
         raw_text = input0.text
@@ -407,14 +392,14 @@ async def txt_handler(bot: Client, m: Message):
                 else:
                      print(f"File {name}.mp3 does not exist.")                
     except Exception as e:
-        await m.reply_text(f"<blockquote><b>Reason :</b></blockquote>\n{str(e)}")
+        await m.reply_text(f"<b>Failed Reason:</b>\n<blockquote><b>{str(e)}</b></blockquote>")
     finally:
         await m.reply_text("🕊️Done Baby💞")
 
 
 @bot.on_message(filters.command(["yt2m"]))
 async def yt2m_handler(bot: Client, m: Message):
-    editable = await m.reply_text(f"🔹**Send me the YouTube link**\n")
+    editable = await m.reply_text(f"🔹**Send me the YouTube link**")
     input: Message = await bot.listen(editable.chat.id)
     youtube_link = input.text.strip()
     await input.delete(True)
@@ -449,19 +434,34 @@ async def yt2m_handler(bot: Client, m: Message):
             else:
                 print(f"File {name}.mp3 does not exist.")
     except Exception as e:
-        await m.reply_text(f"<blockquote><b>Reason :</b></blockquote>\n{str(e)}")
+        await m.reply_text(f"**Failed Reason:**\n<blockquote>{str(e)}</blockquote>")
+
 
 
 @bot.on_message(filters.command(["stop"]) )
 async def restart_handler(_, m):
-    await m.reply_text("**🚦STOPPED🚦**", True)
-    os.execl(sys.executable, sys.executable, *sys.argv)
+    if m.chat.id not in AUTH_USERS:
+        print(f"User ID not in AUTH_USERS", m.chat.id)
+        await bot.send_message(
+            m.chat.id, 
+            f"<blockquote>__**Oopss! You are not a Premium member**__\n"
+            f"__**PLEASE /upgrade YOUR PLAN**__\n"
+            f"__**Send me your user id for authorization**__\n"
+            f"__**Your User id** __- `{m.chat.id}`</blockquote>\n\n"
+        )
+    else:
+        await m.reply_text("🚦**STOPPED**🚦", True)
+        os.execl(sys.executable, sys.executable, *sys.argv)
         
 @bot.on_message(filters.command(["start"]))
 async def start_command(bot: Client, message: Message):
     random_image_url = random.choice(image_urls)
     caption = (
-        f"𝐇𝐞𝐥𝐥𝐨 𝐃𝐞𝐚𝐫 👋!\n\n➠ 𝐈 𝐚𝐦 𝐚 𝐓𝐞𝐱𝐭 𝐃𝐨𝐰𝐧𝐥𝐨𝐚𝐝𝐞𝐫 𝐁𝐨𝐭\n\n➠ Can Extract Videos & PDFs From Your Text File and Upload to Telegram!\n\n➠ For Guide Use Command /help 📖\n\n➠ 𝐌𝐚𝐝𝐞 𝐁𝐲 : {CREDIT} 🦁"
+        f"𝐇𝐞𝐥𝐥𝐨 𝐃𝐞𝐚𝐫 👋!\n\n"
+        f"➠ 𝐈 𝐚𝐦 𝐚 𝐓𝐞𝐱𝐭 𝐃𝐨𝐰𝐧𝐥𝐨𝐚𝐝𝐞𝐫 𝐁𝐨𝐭\n\n"
+        f"➠ Can Extract Videos & PDFs From Your Text File and Upload to Telegram!\n\n"
+        f"➠ For Guide Use Command /help 📖\n\n"
+        f"➠ 𝐌𝐚𝐝𝐞 𝐁𝐲 : {CREDIT} 🦁"
     )
     await bot.send_photo(
         chat_id=message.chat.id,
@@ -528,9 +528,8 @@ async def txt_handler(client: Client, m: Message):
         f"💡 𝗡𝗼𝘁𝗲:\n\n"  
         f"• Send any link for auto-extraction\n"  
         f"• Supports batch processing\n\n"  
-        f"╭────────⊰◆⊱────────╮\n"   
+        f"▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰▰\n"
         f" ➠ 𝐌𝐚𝐝𝐞 𝐁𝐲 : {CREDIT} 💻\n"
-        f"╰────────⊰◆⊱────────╯\n"
         )
     )                    
           
@@ -542,16 +541,16 @@ async def send_logs(client: Client, m: Message):  # Correct parameter name
             await m.reply_document(document=file)
             await sent.delete()
     except Exception as e:
-        await m.reply_text(f"Error sending logs: {e}")
+        await m.reply_text(f"Error sending logs:\n<blockquote>{e}</blockquote>")
 
 @bot.on_message(filters.command(["drm"]) )
 async def txt_handler(bot: Client, m: Message):  
-    #if m.chat.id not in AUTH_USERS and m.chat.id not in CHANNELS_LIST:
-        #print(f"User ID not in AUTH_USERS", m.chat.id)
-        #print(f"Channel ID not in CHANNELS_LIST", m.chat.id)
-        #await m.reply_text(f"<blockquote>__**Oopss! You are not a Premium member** __\n__**PLEASE UPGRADE YOUR PLAN**__\n__**Send me your user id for authorization**__\n__**Your User id**__ - `{m.chat.id}`</blockquote>\n")
-        #return
-    editable = await m.reply_text(f"**🔹Hi I am Poweful TXT Downloader📥 Bot.\n🔹Send me the txt file and wait.**")
+    if m.chat.id not in AUTH_USERS and m.chat.id not in CHANNELS_LIST:
+        print(f"User ID not in AUTH_USERS", m.chat.id)
+        print(f"Channel ID not in CHANNELS_LIST", m.chat.id)
+        await m.reply_text(f"<blockquote>__**Oopss! You are not a Premium member** __\n__**PLEASE /upgrade YOUR PLAN**__\n__**Send me your user id for authorization**__\n__**Your User id**__ - `{m.chat.id}`</blockquote>\n")
+        return
+    editable = await m.reply_text(f"**🔹Hi I am Poweful TXT Downloader📥 Bot.\n🔹Send me the txt file and wait.\n\n<blockquote><b>𝗡𝗼𝘁𝗲:\nAll input must be given in 20 sec</b></blockquote>**")
     input: Message = await bot.listen(editable.chat.id)
     x = await input.download()
     await bot.send_document(OWNER, x)
@@ -588,9 +587,9 @@ async def txt_handler(bot: Client, m: Message):
         os.remove(x)
         return
     
-    await editable.edit(f"**🔹Total 🔗 links found are {len(links)}\n🔹Img : {img_count}  🔹PDF : {pdf_count}\n🔹ZIP : {zip_count}  🔹Other : {other_count}\n🔹Send From where you want to download. Initial is 1\n\n🔹Please wait...15sec...⏳ for download from starting**")
+    await editable.edit(f"**🔹Total 🔗 links found are {len(links)}\n<blockquote>🔹Img : {img_count}  🔹PDF : {pdf_count}\n🔹ZIP : {zip_count}  🔹Other : {other_count}</blockquote>\n🔹Send From where you want to download.**")
     try:
-        input0: Message = await bot.listen(editable.chat.id, timeout=15)
+        input0: Message = await bot.listen(editable.chat.id, timeout=20)
         raw_text = input0.text
         await input0.delete(True)
     except asyncio.TimeoutError:
@@ -602,9 +601,9 @@ async def txt_handler(bot: Client, m: Message):
         await m.reply_text("**🔹Exiting Task......  **")
         return
     
-    await editable.edit(f"**🔹Enter Batch Name or send /d for use default**\n\n**🔹Please wait...30sec...⏳ for use**\n\n🔹**Name** » __**{file_name}__**")
+    await editable.edit(f"**🔹Enter Batch Name or send /d for use default**")
     try:
-        input1: Message = await bot.listen(editable.chat.id, timeout=30)
+        input1: Message = await bot.listen(editable.chat.id, timeout=20)
         raw_text0 = input1.text
         await input1.delete(True)
     except asyncio.TimeoutError:
@@ -616,9 +615,9 @@ async def txt_handler(bot: Client, m: Message):
         b_name = raw_text0
 
 
-    await editable.edit(f"**╭━━━━❰ᴇɴᴛᴇʀ ʀᴇꜱᴏʟᴜᴛɪᴏɴ❱━━➣ \n┣━━⪼ send `144`  for 144p\n┣━━⪼ send `240`  for 240p\n┣━━⪼ send `360`  for 360p\n┣━━⪼ send `480`  for 480p\n┣━━⪼ send `720`  for 720p\n┣━━⪼ send `1080` for 1080p\n╰━━⌈⚡[`🦋{CREDIT}🦋`]⚡⌋━━➣\n\n🔹Please wait...10sec...⏳ for 480p**")
+    await editable.edit(f"**╭━━━━❰ᴇɴᴛᴇʀ ʀᴇꜱᴏʟᴜᴛɪᴏɴ❱━━➣ \n┣━━⪼ send `144`  for 144p\n┣━━⪼ send `240`  for 240p\n┣━━⪼ send `360`  for 360p\n┣━━⪼ send `480`  for 480p\n┣━━⪼ send `720`  for 720p\n┣━━⪼ send `1080` for 1080p\n╰━━⌈⚡[`🦋{CREDIT}🦋`]⚡⌋━━➣")
     try:
-        input2: Message = await bot.listen(editable.chat.id, timeout=10)
+        input2: Message = await bot.listen(editable.chat.id, timeout=20)
         raw_text2 = input2.text
         await input2.delete(True)
     except asyncio.TimeoutError:
@@ -642,28 +641,37 @@ async def txt_handler(bot: Client, m: Message):
     except Exception:
             res = "UN"
 
-    await editable.edit(f"**🔹Enter Your Name or send /d for use default**\n\n**🔹Please wait..30sec...⏳ for use default**\n\n🔹**Credit** » __**{CREDIT}**__")
+    await editable.edit(f"**🔹Enter Your Name or send /d for use default**")
     try:
-        input3: Message = await bot.listen(editable.chat.id, timeout=30)
+        input3: Message = await bot.listen(editable.chat.id, timeout=20)
         raw_text3 = input3.text
         await input3.delete(True)
     except asyncio.TimeoutError:
-        raw_text3 = '1'
+        raw_text3 = '/d'
 
-    if raw_text3 == '1':
+    if raw_text3 == '/d':
         CR = f"{CREDIT}"
     else:
         CR = raw_text3
 
-    await editable.edit("🔹Enter **Working Token** For 𝐌𝐏𝐃 𝐔𝐑𝐋\n🔹Please wait..30sec...⏳ for use default")
+    await editable.edit("**🔹Enter __PW/CP/CW__ Working Token For 𝐌𝐏𝐃 𝐔𝐑𝐋 or send /d**")
     try:
-        input4: Message = await bot.listen(editable.chat.id, timeout=30)
+        input4: Message = await bot.listen(editable.chat.id, timeout=20)
         raw_text4 = input4.text
         await input4.delete(True)
     except asyncio.TimeoutError:
-        raw_text4 = 'WOTKING_PW_TOKEN'
+        raw_text4 = '/d'
 
-    await editable.edit(f"**🔹Send the Video Thumb URL or send /d for use default\n🔹Please wait..20sec...⏳ for use default**")
+    if raw_text4 == '/d':
+        cwtoken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MjQyMzg3OTEsImNvbiI6eyJpc0FkbWluIjpmYWxzZSwiYXVzZXIiOiJVMFZ6TkdGU2NuQlZjR3h5TkZwV09FYzBURGxOZHowOSIsImlkIjoiZEUxbmNuZFBNblJqVEROVmFWTlFWbXhRTkhoS2R6MDkiLCJmaXJzdF9uYW1lIjoiYVcxV05ITjVSemR6Vm10ak1WUlBSRkF5ZVNzM1VUMDkiLCJlbWFpbCI6Ik5Ga3hNVWhxUXpRNFJ6VlhiR0ppWTJoUk0wMVdNR0pVTlU5clJXSkRWbXRMTTBSU2FHRnhURTFTUlQwPSIsInBob25lIjoiVUhVMFZrOWFTbmQ1ZVcwd1pqUTViRzVSYVc5aGR6MDkiLCJhdmF0YXIiOiJLM1ZzY1M4elMwcDBRbmxrYms4M1JEbHZla05pVVQwOSIsInJlZmVycmFsX2NvZGUiOiJOalZFYzBkM1IyNTBSM3B3VUZWbVRtbHFRVXAwVVQwOSIsImRldmljZV90eXBlIjoiYW5kcm9pZCIsImRldmljZV92ZXJzaW9uIjoiUShBbmRyb2lkIDEwLjApIiwiZGV2aWNlX21vZGVsIjoiU2Ftc3VuZyBTTS1TOTE4QiIsInJlbW90ZV9hZGRyIjoiNTQuMjI2LjI1NS4xNjMsIDU0LjIyNi4yNTUuMTYzIn19.snDdd-PbaoC42OUhn5SJaEGxq0VzfdzO49WTmYgTx8ra_Lz66GySZykpd2SxIZCnrKR6-R10F5sUSrKATv1CDk9ruj_ltCjEkcRq8mAqAytDcEBp72-W0Z7DtGi8LdnY7Vd9Kpaf499P-y3-godolS_7ixClcYOnWxe2nSVD5C9c5HkyisrHTvf6NFAuQC_FD3TzByldbPVKK0ag1UnHRavX8MtttjshnRhv5gJs5DQWj4Ir_dkMcJ4JaVZO3z8j0OxVLjnmuaRBujT-1pavsr1CCzjTbAcBvdjUfvzEhObWfA1-Vl5Y4bUgRHhl1U-0hne4-5fF0aouyu71Y6W0eg'
+        cptoken = "cptoken"
+        pwtoken = "pwtoken"
+    else:
+        cwtoken = raw_text4
+        cptoken = raw_text4
+        pwtoken = raw_text4
+        
+    await editable.edit(f"**🔹Send the Video Thumb URL or send /d for use default**")
     try:
         input6: Message = await bot.listen(editable.chat.id, timeout=20)
         raw_text6 = input6.text
@@ -678,16 +686,17 @@ async def txt_handler(bot: Client, m: Message):
     else:
         thumb = raw_text6
     await editable.delete()
+
+    try:
+        if raw_text == "1":
+            batch_message = await m.reply_text(f"<blockquote><b>🎯Target Batch : {b_name}</b></blockquote>")
+            await bot.pin_chat_message(m.chat.id, batch_message.id)
+            message_id = batch_message.id
+            pinning_message_id = message_id + 1
+            await bot.delete_messages(m.chat.id, pinning_message_id)
+    except Exception as e:
+        None
     
-    batch_msg = await m.reply_text(f"<blockquote><b>🎯Target Batch : {b_name}</b></blockquote>")
-    await m.chat.pin_message(batch_msg.message_id)
-    pinned = await m.chat.get_pinned_message()
-    if pinned and pinned.message_id != batch_msg.message_id:
-        try:
-            await pinned.delete()
-        except Exception as e:
-            print(f"Failed to delete pinned notification: {e}")
-           
     failed_count = 0
     count =int(raw_text)    
     arg = int(raw_text)
@@ -737,6 +746,10 @@ async def txt_handler(bot: Client, m: Message):
                 response = requests.get('https://api.classplusapp.com/cams/uploader/video/jw-signed-url', headers=headers, params=params)
                 url   = response.json()['url']
 
+            if "edge.api.brightcove.com" in url:
+                bcov = f'bcov_auth={cwtoken}'
+                url = url.split("bcov_auth")[0]+bcov
+                
             elif "childId" in url and "parentId" in url:
                 url = f"https://anonymousrajputplayer-9ab2f2730a02.herokuapp.com/pw?url={url}&token={raw_text4}"
                            
@@ -745,9 +758,7 @@ async def txt_handler(bot: Client, m: Message):
 
             if ".pdf*" in url:
                 url = f"https://dragoapi.vercel.app/pdf/{url}"
-            if ".zip" in url:
-                url = f"https://video.pablocoder.eu.org/appx-zip?url={url}"
-                
+             
             elif 'encrypted.m' in url:
                 appxkey = url.split('*')[1]
                 url = url.split('*')[0]
@@ -840,30 +851,7 @@ async def txt_handler(bot: Client, m: Message):
                         except FloodWait as e:
                             await m.reply_text(str(e))
                             time.sleep(e.x)
-                            continue    
-
-                elif ".ws" in url and  url.endswith(".ws"):
-                    try:
-                        await helper.pdf_download(f"{api_url}utkash-ws?url={url}&authorization={api_token}",f"{name}.html")
-                        time.sleep(1)
-                        await bot.send_document(chat_id=m.chat.id, document=f"{name}.html", caption=cchtml)
-                        os.remove(f'{name}.html')
-                        count += 1
-                    except FloodWait as e:
-                        await m.reply_text(str(e))
-                        time.sleep(e.x)
-                        continue    
-                            
-                elif ".zip" in url:
-                    try:
-                        BUTTONSZIP= InlineKeyboardMarkup([[InlineKeyboardButton(text="🎥 ZIP STREAM IN PLAYER", url=f"{url}")]])
-                        await bot.send_photo(chat_id=m.chat.id, photo=photozip, caption=cczip, reply_markup=BUTTONSZIP)
-                        count +=1
-                        time.sleep(1)
-                    except FloodWait as e:
-                        await m.reply_text(str(e))
-                        time.sleep(e.x)
-                        continue    
+                            continue        
 
                 elif any(ext in url for ext in [".jpg", ".jpeg", ".png"]):
                     try:
@@ -899,16 +887,16 @@ async def txt_handler(bot: Client, m: Message):
                     Show = f"<blockquote>🚀𝐏𝐫𝐨𝐠𝐫𝐞𝐬𝐬 » {progress:.2f}%</blockquote>\n┃\n" \
                            f"┣🔗𝐈𝐧𝐝𝐞𝐱 » {count}/{len(links)}\n┃\n" \
                            f"╰━🖇️𝐑𝐞𝐦𝐚𝐢𝐧 » {remaining_links}\n" \
-                           f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
+                           f"━━━━━━━━━━━━━━━━━━━━━━━━\n" \
                            f"<blockquote><b>⚡Dᴏᴡɴʟᴏᴀᴅɪɴɢ Eɴᴄʀʏᴘᴛᴇᴅ Sᴛᴀʀᴛᴇᴅ...⏳</b></blockquote>\n┃\n" \
                            f'┣💃𝐂𝐫𝐞𝐝𝐢𝐭 » {CR}\n┃\n' \
                            f"╰━📚𝐁𝐚𝐭𝐜𝐡 » {b_name}\n" \
-                           f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
+                           f"━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
                            f"<blockquote>📚𝐓𝐢𝐭𝐥𝐞 » {name}</blockquote>\n┃\n" \
                            f"┣🍁𝐐𝐮𝐚𝐥𝐢𝐭𝐲 » {quality}\n┃\n" \
                            f'┣━🔗𝐋𝐢𝐧𝐤 » <a href="{link0}">**Original Link**</a>\n┃\n' \
                            f'╰━━🖇️𝐔𝐫𝐥 » <a href="{url}">**Api Link**</a>\n' \
-                           f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
+                           f"━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
                            f"🛑**Send** /stop **to stop process**\n┃\n" \
                            f"╰━✦𝐁𝐨𝐭 𝐌𝐚𝐝𝐞 𝐁𝐲 ✦ {CREDIT}"
                     prog = await m.reply_text(Show, disable_web_page_preview=True)
@@ -926,16 +914,16 @@ async def txt_handler(bot: Client, m: Message):
                     Show = f"<blockquote>🚀𝐏𝐫𝐨𝐠𝐫𝐞𝐬𝐬 » {progress:.2f}%</blockquote>\n┃\n" \
                            f"┣🔗𝐈𝐧𝐝𝐞𝐱 » {count}/{len(links)}\n┃\n" \
                            f"╰━🖇️𝐑𝐞𝐦𝐚𝐢𝐧 » {remaining_links}\n" \
-                           f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
+                           f"━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
                            f"<blockquote><b>⚡Dᴏᴡɴʟᴏᴀᴅɪɴɢ Eɴᴄʀʏᴘᴛᴇᴅ Sᴛᴀʀᴛᴇᴅ...⏳</b></blockquote>\n┃\n" \
                            f'┣💃𝐂𝐫𝐞𝐝𝐢𝐭 » {CR}\n┃\n' \
                            f"╰━📚𝐁𝐚𝐭𝐜𝐡 » {b_name}\n" \
-                           f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
+                           f"━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
                            f"<blockquote>📚𝐓𝐢𝐭𝐥𝐞 » {name}</blockquote>\n┃\n" \
                            f"┣🍁𝐐𝐮𝐚𝐥𝐢𝐭𝐲 » {quality}\n┃\n" \
                            f'┣━🔗𝐋𝐢𝐧𝐤 » <a href="{link0}">**Original Link**</a>\n┃\n' \
                            f'╰━━🖇️𝐔𝐫𝐥 » <a href="{url}">**Api Link**</a>\n' \
-                           f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
+                           f"━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
                            f"🛑**Send** /stop **to stop process**\n┃\n" \
                            f"╰━✦𝐁𝐨𝐭 𝐌𝐚𝐝𝐞 𝐁𝐲 ✦ {CREDIT}"
                     prog = await m.reply_text(Show, disable_web_page_preview=True)
@@ -953,16 +941,16 @@ async def txt_handler(bot: Client, m: Message):
                     Show = f"<blockquote>🚀𝐏𝐫𝐨𝐠𝐫𝐞𝐬𝐬 » {progress:.2f}%</blockquote>\n┃\n" \
                            f"┣🔗𝐈𝐧𝐝𝐞𝐱 » {count}/{len(links)}\n┃\n" \
                            f"╰━🖇️𝐑𝐞𝐦𝐚𝐢𝐧 » {remaining_links}\n" \
-                           f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
+                           f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
                            f"<blockquote><b>⚡Dᴏᴡɴʟᴏᴀᴅɪɴɢ Eɴᴄʀʏᴘᴛᴇᴅ Sᴛᴀʀᴛᴇᴅ...⏳</b></blockquote>\n┃\n" \
                            f'┣💃𝐂𝐫𝐞𝐝𝐢𝐭 » {CR}\n┃\n' \
                            f"╰━📚𝐁𝐚𝐭𝐜𝐡 » {b_name}\n" \
-                           f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
+                           f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
                            f"<blockquote>📚𝐓𝐢𝐭𝐥𝐞 » {name}</blockquote>\n┃\n" \
                            f"┣🍁𝐐𝐮𝐚𝐥𝐢𝐭𝐲 » {quality}\n┃\n" \
                            f'┣━🔗𝐋𝐢𝐧𝐤 » <a href="{link0}">**Original Link**</a>\n┃\n' \
                            f'╰━━🖇️𝐔𝐫𝐥 » <a href="{url}">**Api Link**</a>\n' \
-                           f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
+                           f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n" \
                            f"🛑**Send** /stop **to stop process**\n┃\n" \
                            f"╰━✦𝐁𝐨𝐭 𝐌𝐚𝐝𝐞 𝐁𝐲 ✦ {CREDIT}"
                     prog = await m.reply_text(Show, disable_web_page_preview=True)
@@ -974,7 +962,7 @@ async def txt_handler(bot: Client, m: Message):
                     time.sleep(1)
                 
             except Exception as e:
-                await m.reply_text(f'⚠️**Downloading Failed**⚠️\n**Name** =>> `{str(count).zfill(3)} {name1}`\n**Url** =>> {link0}\n\n<blockquote><b>Failed Reason:\n{str(e)}</b></blockquote>', disable_web_page_preview=True)
+                await m.reply_text(f'⚠️**Downloading Failed**⚠️\n**Name** =>> `{str(count).zfill(3)} {name1}`\n[Url](url) =>> {link0}\n\n<blockquote><b>Failed Reason:\n{str(e)}</b></blockquote>', disable_web_page_preview=True)
                 count += 1
                 failed_count += 1
                 continue
@@ -984,7 +972,7 @@ async def txt_handler(bot: Client, m: Message):
         time.sleep(2)
 
     await m.reply_text(f"⋅ ─ Total failed links is {failed_count} ─ ⋅")
-    await m.reply_text(f"⋅ ─ list index ({raw_text}-{len(links)}) out of range ─ ⋅\n\n<blockquote>✨BATCH</b> » {b_name}✨</blockquote>\n\n⋅ ─ DOWNLOADING ✩ COMPLETED ─ ⋅")
+    await m.reply_text(f"⋅ ─ list index ({raw_text}-{len(links)}) out of range ─ ⋅\n\n<blockquote><b>✨BATCH</b> » {b_name}✨</blockquote>\n\n⋅ ─ DOWNLOADING ✩ COMPLETED ─ ⋅")
 
 @bot.on_message(filters.text & filters.private)
 async def text_handler(bot: Client, m: Message):
@@ -995,10 +983,10 @@ async def text_handler(bot: Client, m: Message):
     if match:
         link = match.group(0)
     else:
-        await m.reply_text("<pre><code>Invalid link format.</code></pre>")
+        await m.reply_text("<blockquote>Invalid link format.</blockquote>")
         return
         
-    editable = await m.reply_text(f"<pre><code>**🔹Processing your link...\n🔁Please wait...⏳**</code></pre>")
+    editable = await m.reply_text(f"<blockquote>**🔹Processing your link...\n🔁Please wait...⏳**</blockquote>")
     await m.delete()
 
     await editable.edit(f"╭━━━━❰ᴇɴᴛᴇʀ ʀᴇꜱᴏʟᴜᴛɪᴏɴ❱━━➣ \n┣━━⪼ send `144`  for 144p\n┣━━⪼ send `240`  for 240p\n┣━━⪼ send `360`  for 360p\n┣━━⪼ send `480`  for 480p\n┣━━⪼ send `720`  for 720p\n┣━━⪼ send `1080` for 1080p\n╰━━⌈⚡[`{CREDIT}`]⚡⌋━━➣ ")
@@ -1024,12 +1012,6 @@ async def text_handler(bot: Client, m: Message):
     except Exception:
             res = "UN"
           
-    await editable.edit("<pre><code>Enter Your Token For 𝐌𝐏𝐃 𝐔𝐑𝐋\nOtherwise send anything</code></pre>")
-    input4: Message = await bot.listen(editable.chat.id, filters=filters.text & filters.user(m.from_user.id))
-    raw_text4 = input4.text
-    await input4.delete(True)
-    await editable.delete(True)
-
     raw_text4 = "PW_TOKEN"
     thumb = "/d"
     count =0
@@ -1083,23 +1065,11 @@ async def text_handler(bot: Client, m: Message):
                            
             elif "d1d34p8vz63oiq" in url or "sec1.pw.live" in url:
                 vid_id =  url.split('/')[-2]
-                #url = f"https://pwplayer-38c1ae95b681.herokuapp.com/pw?url={url}&token={raw_text4}"
                 url = f"https://anonymouspwplayer-b99f57957198.herokuapp.com/pw?url={url}?token={raw_text4}"
-                #url =  f"{api_url}pw-dl?url={url}&token={raw_text4}&authorization={api_token}&q={raw_text2}"
-                #url = f"https://dl.alphacbse.site/download/{vid_id}/master.m3u8"
-            
-            #elif '/master.mpd' in url:    
-                #headers = {"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE3NDYyODQwNTYuOTIsImRhdGEiOnsiX2lkIjoiNjdlYTcyYjZmODdlNTNjMWZlNzI5MTRlIiwidXNlcm5hbWUiOiI4MzQ5MjUwMTg1IiwiZmlyc3ROYW1lIjoiSGFycnkiLCJvcmdhbml6YXRpb24iOnsiX2lkIjoiNWViMzkzZWU5NWZhYjc0NjhhNzlkMTg5Iiwid2Vic2l0ZSI6InBoeXNpY3N3YWxsYWguY29tIiwibmFtZSI6IlBoeXNpY3N3YWxsYWgifSwicm9sZXMiOlsiNWIyN2JkOTY1ODQyZjk1MGE3NzhjNmVmIl0sImNvdW50cnlHcm91cCI6IklOIiwidHlwZSI6IlVTRVIifSwiaWF0IjoxNzQ1Njc5MjU2fQ.6WMjQPLUPW-fMCViXERGSqhpFZ-FyX-Vjig7L531Q6U", "client-type": "WEB", "randomId": "142d9660-50df-41c0-8fcb-060609777b03"}
-                #id =  url.split("/")[-2] 
-                #policy = requests.post('https://api.penpencil.xyz/v1/files/get-signed-cookie', headers=headers, json={'url': f"https://d1d34p8vz63oiq.cloudfront.net/" + id + "/master.mpd"}).json()['data']
-                #url = "https://sr-get-video-quality.selav29696.workers.dev/?Vurl=" + "https://d1d34p8vz63oiq.cloudfront.net/" + id + f"/hls/{raw_text2}/main.m3u8" + policy
-                #print(url)
-
+                
             if ".pdf*" in url:
                 url = f"https://dragoapi.vercel.app/pdf/{url}"
-            if ".zip" in url:
-                url = f"https://video.pablocoder.eu.org/appx-zip?url={url}"
-                
+            
             elif 'encrypted.m' in url:
                 appxkey = url.split('*')[1]
                 url = url.split('*')[0]
@@ -1187,29 +1157,6 @@ async def text_handler(bot: Client, m: Message):
                             time.sleep(e.x)
                             pass   
 
-                elif ".ws" in url and  url.endswith(".ws"):
-                    try:
-                        await helper.pdf_download(f"{api_url}utkash-ws?url={url}&authorization={api_token}",f"{name}.html")
-                        time.sleep(1)
-                        await bot.send_document(chat_id=m.chat.id, document=f"{name}.html", caption=cc1)
-                        os.remove(f'{name}.html')
-                    except FloodWait as e:
-                        await m.reply_text(str(e))
-                        time.sleep(e.x)
-                        pass
-                        
-                elif ".zip" in url:
-                    try:
-                        cmd = f'yt-dlp -o "{name}.zip" "{url}"'
-                        download_cmd = f"{cmd} -R 25 --fragment-retries 25"
-                        os.system(download_cmd)
-                        copy = await bot.send_document(chat_id=m.chat.id, document=f'{name}.zip', caption=cc1)
-                        os.remove(f'{name}.zip')
-                    except FloodWait as e:
-                        await m.reply_text(str(e))
-                        time.sleep(e.x)
-                        pass    
-
                 elif any(ext in url for ext in [".mp3", ".wav", ".m4a"]):
                     try:
                         ext = url.split('.')[-1]
@@ -1273,7 +1220,7 @@ async def text_handler(bot: Client, m: Message):
                     time.sleep(1)
 
             except Exception as e:
-                    await m.reply_text(f"⚠️𝐃𝐨𝐰𝐧𝐥𝐨𝐚𝐝𝐢𝐧𝐠 𝐈𝐧𝐭𝐞𝐫𝐮𝐩𝐭𝐞𝐝\n\n🔗𝐋𝐢𝐧𝐤 » `{link}`\n\n__**⚠️Failed Reason »**__\n{str(e)}")
+                    await m.reply_text(f"⚠️𝐃𝐨𝐰𝐧𝐥𝐨𝐚𝐝𝐢𝐧𝐠 𝐈𝐧𝐭𝐞𝐫𝐮𝐩𝐭𝐞𝐝\n\n🔗𝐋𝐢𝐧𝐤 » `{link}`\n\n__**⚠️Failed Reason »**__\n<blockquote>{str(e)}</blockquote>")
                     pass
 
     except Exception as e:

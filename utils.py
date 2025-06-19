@@ -88,10 +88,10 @@ async def progress_bar(current, total, reply, start): #NIKHIL SAINI BOTS
 
             symbol_pairs = [ #NIKHIL SAINI BOTS
                 ("▬", "▭"), #NIKHIL SAINI BOTS
-                ("✅", "☑️"), #NIKHIL SAINI BOTS
-                ("🐬", "🦈"), #NIKHIL SAINI BOTS
-                ("💚", "💛"), #NIKHIL SAINI BOTS
-                ("🌟", "⭐"), #NIKHIL SAINI BOTS
+                #("✅", "☑️"), #NIKHIL SAINI BOTS
+                #("🐬", "🦈"), #NIKHIL SAINI BOTS
+                #("💚", "💛"), #NIKHIL SAINI BOTS
+                #("🌟", "⭐"), #NIKHIL SAINI BOTS
                 ("▰", "▱") #NIKHIL SAINI BOTS
             ] #NIKHIL SAINI BOTS
             chosen_pair = random.choice(symbol_pairs) #NIKHIL SAINI BOTS

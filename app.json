@@ -7,7 +7,7 @@
         "video-extract",
         "pyrogram"
     ],
-    "repository": "https://github.com/nikhilsainiop/saini-txt-direct",
+    "repository": "https://github.com/cyberseller999/saini-txt-direct",
     "success_url": "https://t.me/saini_contact_bot",
     "stack": "container",
     "env": {
@@ -26,9 +26,19 @@
             "value": "",
             "required": true
         },
-        "token_cp":{
-            "description": "𝘌𝘯𝘵𝘦𝘳 𝘞𝘰𝘳𝘬𝘪𝘯𝘨 𝘊𝘭𝘢𝘴𝘴𝘱𝘭𝘶𝘴 𝘛𝘰𝘬𝘦𝘯",
-            "value": "eyJjb3Vyc2VJZCI6IjQ1NjY4NyIsInR1dG9ySWQiOm51bGwsIm9yZ0lkIjo0ODA2MTksImNhdGVnb3J5SWQiOm51bGx9r",
+        "OWNER": {
+            "description": "𝙀𝙣𝙩𝙚𝙧 𝙔𝙤𝙪𝙧 𝙏𝙚𝙡𝙚𝙜𝙧𝙖𝙢 𝙄𝘿",
+            "value": "5680454765",
+            "required": true
+        },
+        "CREDIT": {
+            "description": "𝙀𝙣𝙩𝙚𝙧 𝘾𝙧𝙚𝙙𝙞𝙩 𝙉𝙖𝙢𝙚 𝙞𝙣 𝙖𝙡𝙢𝙤𝙨𝙩 6-8 𝙡𝙚𝙩𝙩𝙚𝙧𝙨",
+            "value": "𝙎𝘼𝙄𝙉𝙄 𝘽𝙊𝙏𝙎",
+            "required": true
+        },
+        "LOG_CHANNEL": {
+            "description": "𝙀𝙣𝙩𝙚𝙧 𝙇𝙊𝙂 𝘾𝙃𝘼𝙉𝙉𝙀𝙇 𝙄𝘿",
+            "value": "-100xxxxxxxxx",
             "required": true
         }
     },
