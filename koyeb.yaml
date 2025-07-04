@@ -1,0 +1,21 @@
+name: saini-txt-leech-bot
+services:
+  - name: main
+    git:
+      url: https://github.com/cyberseller999/Saini-txt-direct.git
+      branch: main
+    run_command: python main.py
+    env:
+      - key: BOT_TOKEN
+        value: ""
+      - key: API_ID
+        value: ""
+      - key: API_HASH
+        value: ""
+      - key: CREDIT
+        value: ""
+      - key: OWNER
+        value: ""
+    instance_type: Free
+    ports:
+      - 8080
